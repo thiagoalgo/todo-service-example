@@ -1,17 +1,18 @@
 import parser from 'co-body'
 
 export async function updateTodo(ctx: Context, next: () => Promise<any>) {
-  const { id } = ctx.vtex.route.params
+  const {
+    clients: { todo: todoClient },
+  } = ctx
 
-  console.info('ID: ', id)
+  const { id } = ctx.vtex.route.params
 
   const data = await parser(ctx.req)
 
-  // TODO chamar masterdata para salvar
-  data.id = id
+  const resp = await todoClient.update(id as string, data)
 
   ctx.status = 200
-  ctx.body = data
+  ctx.body = resp
   ctx.set('Cache-Control', 'no-cache')
 
   await next()

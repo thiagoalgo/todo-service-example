@@ -1,9 +1,11 @@
 export async function deleteTodo(ctx: Context, next: () => Promise<any>) {
+  const {
+    clients: { todo: todoClient },
+  } = ctx
+
   const { id } = ctx.vtex.route.params
 
-  console.info('ID: ', id)
-
-  // TODO: excluir dados no masterdata
+  await todoClient.delete(id as string)
 
   ctx.status = 200
   ctx.body = { id }
